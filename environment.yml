@@ -30,7 +30,7 @@ dependencies:
     - accelerate
     - openai
     - anthropic
-    - google-generativeai
+    - google-genai
     - gradio
     - gensim
     - modal
