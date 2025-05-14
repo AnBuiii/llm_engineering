@@ -3,6 +3,7 @@ from tqdm import tqdm
 from datasets import load_dataset
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from items import Item
+from typing import List
 
 CHUNK_SIZE = 1000
 MIN_PRICE = 0.5
@@ -34,7 +35,7 @@ class ItemLoader:
         """
         Create a list of Items from this chunk of elements from the Dataset
         """
-        batch = []
+        batch:List[Item] = []
         for datapoint in chunk:
             result = self.from_datapoint(datapoint)
             if result:
@@ -54,7 +55,7 @@ class ItemLoader:
         Use concurrent.futures to farm out the work to process chunks of datapoints -
         This speeds up processing significantly, but will tie up your computer while it's doing so!
         """
-        results = []
+        results:List[Item] = []
         chunk_count = (len(self.dataset) // CHUNK_SIZE) + 1
         with ProcessPoolExecutor(max_workers=workers) as pool:
             for batch in tqdm(pool.map(self.from_chunk, self.chunk_generator()), total=chunk_count):
